@@ -4,7 +4,6 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebas
 
 import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 
-const addBtn = document.getElementById("add-button")
 
 const appSettings = {
   databaseURL: "https://playground-8c855-default-rtdb.firebaseio.com/"
@@ -15,6 +14,8 @@ const database = getDatabase(app)
 const shoppingListInDB = ref(database, "shoppingList")
 
 const inputFieldEl = document.getElementById("input-field")
+const addBtn = document.getElementById("add-button")
+const shoppingListEl = document.getElementById("shopping-list")
 
 //creating event listener so when button is clicked, the text in input field is console.loged
 addBtn.addEventListener("click", function(){
@@ -22,5 +23,7 @@ addBtn.addEventListener("click", function(){
 
   push(shoppingListInDB, inputValue)
 
-  console.log(inputValue)
+  inputFieldEl.value = "" //clears the input when button is pushed
+  shoppingListEl.innerHTML += `<li>${inputValue}</li>` // adds input value into new <li> element in html
+
 })
