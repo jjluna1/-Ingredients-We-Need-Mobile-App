@@ -2,7 +2,7 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
 
-import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
+import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 
 
 const appSettings = {
@@ -23,7 +23,26 @@ addBtn.addEventListener("click", function(){
 
   push(shoppingListInDB, inputValue)
 
-  inputFieldEl.value = "" //clears the input when button is pushed
+  clearInputFieldEl() //clears the input when button is pushed
   shoppingListEl.innerHTML += `<li>${inputValue}</li>` // adds input value into new <li> element in html
-
+  appendItemToShoppingListEl(inputValue)
 })
+
+onValue(shoppingListInDB, function(snapshot) {
+    let itemsArray = Object.values(snapshot.val())
+    clearInputFieldEl() // clears out before loop iteration to avoid clones
+    // Wrote a for loop to iterate on itemsArray and console log each item
+    for (let i = 0; i < itemsArray.length; i++) {
+        //Used the appendItemToShoppingListEl(itemValue) function inside of the for loop to append item to the shopping list element for each iteration.
+        
+        appendItemToShoppingListEl(itemsArray[i])
+    }
+})
+
+function clearInputFieldEl() {
+  inputFieldEl.value = ""
+}
+
+function appendItemToShoppingListEl(itemValue) {
+  shoppingListEl.innerHTML += `<li>${itemValue}</li>`
+}
