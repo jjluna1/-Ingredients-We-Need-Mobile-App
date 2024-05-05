@@ -4,6 +4,7 @@ body {
   padding: 0;
   font-family: 'Rubik', sans-serif;
   background-color: rgba(255, 253, 253, 0.033);
+  user-select: none;
 }
 
 .container {
@@ -19,7 +20,7 @@ img {
 }
 
 input {
-  color: #432000;
+  color: #551B14;
   background-color: #DCE1EB;
   border: 0;
   padding: 15px;
@@ -32,7 +33,7 @@ input {
 
 button {
   color: #FDFDFD;
-  background-color: #AC485A;
+  background-color: #AE847E;
   border: 0;
   padding: 15px;
   border-radius: 8px;
@@ -40,6 +41,12 @@ button {
   text-align: center;
   font-family: 'Rubik', sans-serif;
 }
+
+button:hover {
+  background-color: #432000;
+  cursor: pointer;
+}
+
 ul {
   list-style-type: none;
   padding: 0;
@@ -56,4 +63,9 @@ ul li {
   flex-grow: 1;
   text-align: center;
   box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+ul li:hover {
+  background-color: #EDDEA4;
+  cursor: pointer;
 }
