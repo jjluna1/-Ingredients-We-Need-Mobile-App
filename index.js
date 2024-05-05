@@ -2,7 +2,7 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
 
-import { getDatabase, ref, push, onValue } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
+import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 
 
 const appSettings = {
@@ -27,15 +27,24 @@ addBtn.addEventListener("click", function(){
 })
 
 onValue(shoppingListInDB, function(snapshot) {
-    let itemsArray = Object.values(snapshot.val())
 
-    clearShoppingListEl() // clears out before loop iteration to avoid clones
-    // Wrote a for loop to iterate on itemsArray and console log each item
-    for (let i = 0; i < itemsArray.length; i++) {
-        //Used the appendItemToShoppingListEl(itemValue) function inside of the for loop to append item to the shopping list element for each iteration.
+    if (snapshot.exists()) {
+        let itemsArray = Object.entries(snapshot.val())
+
+        clearShoppingListEl()
+
+        for (let i = 0; i < itemsArray.length; i++) {
         
-        appendItemToShoppingListEl(itemsArray[i])
+            let currentItem = itemsArray[i]
+            let currentItemID = currentItem[0]
+            let currentItemValue = currentItem[1]
+
+            appendItemToShoppingListEl(currentItem)
     }
+    } else {
+      shoppingListEl.innerHTML = "No items here... yet"
+    }
+    
 })
 
 function clearShoppingListEl() {
@@ -46,6 +55,19 @@ function clearInputFieldEl() {
   inputFieldEl.value = ""
 }
 
-function appendItemToShoppingListEl(itemValue) {
-  shoppingListEl.innerHTML += `<li>${itemValue}</li>`
+function appendItemToShoppingListEl(item) {
+  let itemID = item[0]
+  let itemValue = item[1]
+
+  let newEl = document.createElement("li")
+
+  newEl.textContent = itemValue
+
+  newEl.addEventListener("click", function() {
+    let exactLocationOfItemInDB = ref(database, `shoppingList/${itemID}`)
+    remove(exactLocationOfItemInDB)
+
+  })
+
+  shoppingListEl.append(newEl)
 }
